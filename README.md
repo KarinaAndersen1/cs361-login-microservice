@@ -303,9 +303,9 @@ if __name__ == "__main__":
 
 ------------------------------------------------------------------------
 
-# UML Sequence Diagram
+## Authentication Sequence Diagram
 
-``` mermaid
+```mermaid
 sequenceDiagram
     participant Client as Program making a request
     participant Service as Login microservice
@@ -325,7 +325,7 @@ sequenceDiagram
     end
 
     loop use access token
-        Client->>Service: GET /oauth2/userinfo\n(access_token or Authorization header)
+        Client->>Service: GET /oauth2/userinfo\n(access_token in query\nor Authorization header)
         Service->>Store: look up access_token
         alt token found
             Service-->>Client: 200 OK\n{sub, preferred_username, name}
@@ -338,10 +338,9 @@ sequenceDiagram
         Client->>Service: POST /oauth2/token\n(grant_type=refresh_token,\nrefresh_token, client_id)
         Service->>Store: look up refresh_token
         alt refresh token valid
-            Service->>Store: generate & store new tokens
-            Service-->>Client: 200 OK\n{new access_token, new refresh_token}
+            Service->>Store: generate & store\nnew access_token and refresh_token
+            Service-->>Client: 200 OK\n{new access_token,\nnew refresh_token}
         else refresh token invalid
             Service-->>Client: 401 Unauthorized\n{"detail": "Invalid refresh token"}
         end
     end
-```
