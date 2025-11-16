@@ -13,7 +13,7 @@ service similar to a lightweight OpenID Connect provider. It supports:
 This service is designed to be called by other microservices or
 frontends in the CS361 ecosystem.
 
-# ▶️ Running the Microservice
+# Running the Microservice
 
 Install dependencies:
 
