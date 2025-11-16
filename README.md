@@ -241,6 +241,66 @@ curl -X POST "http://localhost:8000/oauth2/token" \
 
 This microservice acts as the **authentication broker** for your system.
 
+-----------------------------------------------------------------------
+
+# Test Program (Example of How to Call This Microservice)
+
+The following Python program demonstrates how another microservice or main program can send requests to this Login Microservice and receive the returned data.
+This fulfills the requirement for a test program written in a programming language (not curl, not Postman).
+
+Save this as test_program.py and run it with:
+
+python test_program.py
+
+**Test Program Code (Python)**
+``` python
+import requests
+
+BASE_URL = "http://localhost:8000"
+
+def main():
+    # ---- 1. Request access + refresh tokens ----
+    print("Requesting tokens...")
+
+    token_response = requests.post(
+        f"{BASE_URL}/oauth2/token",
+        json={
+            "grant_type": "password",
+            "username": "alice",
+            "password": "password123",
+            "client_id": "demo-client",
+            "scope": "openid profile"
+        }
+    )
+
+    if token_response.status_code != 200:
+        print("Error getting tokens:", token_response.text)
+        return
+
+    tokens = token_response.json()
+    print("Token Response:", tokens)
+
+    access_token = tokens["access_token"]
+
+    # ---- 2. Use access token to call /userinfo ----
+    print("\nCalling userinfo...")
+
+    userinfo_response = requests.get(
+        f"{BASE_URL}/oauth2/userinfo",
+        params={"access_token": access_token}
+    )
+
+    if userinfo_response.status_code != 200:
+        print("Error calling userinfo:", userinfo_response.text)
+        return
+
+    print("Userinfo Response:", userinfo_response.json())
+
+
+if __name__ == "__main__":
+    main()
+```
+
 ------------------------------------------------------------------------
 
 # UML Sequence Diagram
