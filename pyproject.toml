@@ -1,0 +1,8 @@
+[project]
+name = "login-service"
+version = "0.1.0"
+description = "Minimal OIDC-style identity provider microservice"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
